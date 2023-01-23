@@ -3,50 +3,50 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
-    entry : path.resolve(__dirname, 'js/dashboard_main.js'),
-    output: {
-      path: path.resolve(__dirname, 'public'),
-      filename: 'bundle.js'
-    },
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-      },
-    },
-    performance: {
-      maxAssetSize: 1000000,
-    },
-    devServer: {
-      contentBase: path.join(__dirname, './public'),
-      compress: true,
-      port: 8564,
-    },
-    plugins: [
-      new HTMLWebpackPlugin({
-        filename: 'public/index.html'
-      }),
-      new CleanWebpackPlugin()
-    ],
-    module: {
+  mode: 'development',
+  entry: {
+    all: ["./modules/header/header.js", "./modules/body/body.js", "./modules/footer/footer.js"],
+  },
+  performance: {
+    maxAssetSize: 1000000,
+    maxEntrypointSize: 1000000,
+  },
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "public")
+  },
+  devtool: 'inline-source-map',
+  devServer: {
+    contentBase: path.join(__dirname, './public'),
+    compress: true,
+    port: 8564,
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin(),
+  ],
+  module: {
     rules: [
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
       },
       {
-        test: /\.(jpg|gif|png|jpeg|svg)$/i,
+        test: /\.(png|jpe?g|gif)$/i,
         use: [
-          "file-loader",
+          'file-loader',
           {
-            loader: "image-webpack-loader",
+            loader: 'image-webpack-loader',
             options: {
               bypassOnDebug: true,
               disable: true,
             },
           },
         ],
-      }
+      },
     ]
-  }
-}
+  },
+};
